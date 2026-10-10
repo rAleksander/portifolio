@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR" x-data="app()" :class="{ 'dark': dark }" class="scroll-smooth">
+
+<head>
+
+  <!-- =========================================================
+       CONFIGURAÇÕES BÁSICAS DA PÁGINA
+  ========================================================== -->
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description"
+    content="Renan — Analista de Dados e Desenvolvedor Fullstack. Desenvolvimento de soluções com Python, SQL, Power BI, Django e tecnologias web.">
+
+  <meta name="keywords"
+    content="Renan, Analista de Dados, Desenvolvedor Fullstack, Python, Django, Javascript, SQL, Power BI, Portfólio">
+
+  <meta name="author" content="Renan Aleksander">
+
+  <!-- Open Graph: usado ao compartilhar o site em redes sociais -->
+  <meta property="og:title" content="Renan — Analista de Dados & Desenvolvedor Fullstack">
+
+  <meta property="og:description"
+    content="Portfólio profissional de Renan, com projetos em análise de dados, Python, Javascript,SQL, Power BI e desenvolvimento fullstack.">
+
+  <meta property="og:type" content="website">
+
+  <!-- Domínio -->
+  <meta property="og:url" content="https://seu-dominio.com">
+
+  <title>Renan — Analista de Dados & Desenvolvedor Fullstack</title>
+
+
+  <!-- =========================================================
+       BIBLIOTECAS EXTERNAS
+  ========================================================== -->
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Alpine.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+
+  <!-- =========================================================
+       FONTES
+  ========================================================== -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap"
+    rel="stylesheet">
+
+
+  <!-- =========================================================
+       CONFIGURAÇÃO DO TAILWIND
+       
+       Cores oficiais utilizadas no projeto:
+       Azul  → #08209c
+       Roxo  → #3c038c
+  ========================================================== -->
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+
+      theme: {
+        extend: {
+
+          fontFamily: {
+            display: ['PT Sans', 'sans-serif'],
+            body: ['DM Sans', 'sans-serif']
+          },
+
+          colors: {
+            'brand-blue': '#0549a8',
+            'brand-purple': '#04b6d1'
+          }
+
+        }
+      }
+    }
+  </script>
+
+
+  <!-- =========================================================
+       ESTILOS PERSONALIZADOS
+  ========================================================== -->
+
+  <style>
+    /* Garante que padding e border façam parte do tamanho do elemento */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    /* Fonte principal do site */
+    html,
+    body {
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    /* Fonte dos títulos */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: 'PT Sans', sans-serif;
+    }
+
+    /* Transição suave entre modo claro e escuro */
+    body {
+      transition:
+        background-color .3s,
+        color .3s;
+    }
+
+
+    /* =========================================================
+       TEXTURA DE FUNDO
+    ========================================================== */
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: .35;
+
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+    }
+
+
+    /* =========================================================
+       BARRA DE ROLAGEM
+    ========================================================== */
+
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #3c038c;
+      border-radius: 99px;
+    }
+
+
+    /* =========================================================
+       ANIMAÇÃO DE ENTRADA DOS ELEMENTOS
+    ========================================================== */
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+
+      transition:
+        opacity .6s cubic-bezier(.4, 0, .2, 1),
+        transform .6s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: none;
+    }
+
+    .d1 {
+      transition-delay: .08s;
+    }
+
+    .d2 {
+      transition-delay: .16s;
+    }
+
+    .d3 {
+      transition-delay: .24s;
+    }
+
+    .d4 {
+      transition-delay: .32s;
+    }
+
+
+    /* =========================================================
+       LINHA ANIMADA DO MENU
+    ========================================================== */
+
+    .nl {
+      position: relative;
+    }
+
+    .nl::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1.5px;
+
+      background: currentColor;
+
+      transition:
+        width .22s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .nl:hover::after,
+    .nl.on::after {
+      width: 100%;
+    }
+
+    .nl.on {
+      font-weight: 500;
+    }
+
+
+    /* =========================================================
+       EFEITO SHIMMER DOS BOTÕES
+    ========================================================== */
+
+    .shimmer {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shimmer::after {
+      content: '';
+
+      position: absolute;
+      top: 0;
+      left: -100%;
+
+      width: 60%;
+      height: 100%;
+
+      background: #3c038c;
+
+      transform: skewX(-20deg);
+
+      transition:
+        left .4s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .shimmer:hover::after {
+      left: 160%;
+    }
+
+
+    /* =========================================================
+       IMAGENS
+    ========================================================== */
+
+    .pf {
+      overflow: hidden;
+      background: #d4d4d8;
+    }
+
+    .pf img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+
+    /* =========================================================
+       EFEITO DOS CARDS
+    ========================================================== */
+
+    .card-h {
+      transition:
+        transform .28s cubic-bezier(.4, 0, .2, 1),
+        border-color .18s;
+    }
+
+    .card-h:hover {
+      transform: translateY(-4px);
+    }
+
+
+    /* =========================================================
+       TAGS DE TECNOLOGIA
+    ========================================================== */
+
+    .stag {
+      transition: border-color .18s;
+    }
+
+
+    /* Esconde elementos Alpine antes da inicialização */
+    [x-cloak] {
+      display: none !important;
+    }
+  </style>
+
+</head>
+
+
+<body class="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 antialiased">
+
+
+  <!-- =========================================================
+     CABEÇALHO / MENU
+========================================================== -->
+
+  <header class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
+    :class="sc ? 'bg-white/90 dark:bg-zinc-950/90 backdrop-blur-md shadow-sm shadow-black/5' : ''">
+
+    <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between" aria-label="Navegação principal">
+
+      <!-- Logo -->
+      <a href="#hero" class="font-display font-bold text-xl tracking-tight relative z-10">
+        <span class="text-zinc-900 dark:text-white">Ren</span><span class="text-brand-purple">an</span>
+      </a>
+
+
+      <!-- Menu desktop -->
+      <ul class="hidden md:flex items-center gap-8 text-sm" role="list">
+
+        <li>
+          <a href="#services"
+            class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+            :class="s === 'services' ? 'on !text-zinc-900 dark:!text-white' : ''">
+            Serviços
+          </a>
+        </li>
+
+        <li>
+          <a href="#work"
+            class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+            :class="s === 'work' ? 'on !text-zinc-900 dark:!text-white' : ''">
+            Projetos
+          </a>
+        </li>
+
+        <li>
+          <a href="#about"
+            class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+            :class="s === 'about' ? 'on !text-zinc-900 dark:!text-white' : ''">
+            Sobre
+          </a>
+        </li>
+
+        <li>
+          <a href="#reviews"
+            class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+            :class="s === 'reviews' ? 'on !text-zinc-900 dark:!text-white' : ''">
+            Avaliações
+          </a>
+        </li>
+
+        <li>
+          <a href="#contact"
+            class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+            :class="s === 'contact' ? 'on !text-zinc-900 dark:!text-white' : ''">
+            Contato
+          </a>
+        </li>
+
+      </ul>
+
+
+      <!-- Controles do menu -->
+      <div class="flex items-center gap-3">
+
+
+        <!-- Alternância entre modo claro e escuro -->
+        <button @click="dark = !dark"
+          class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+          :aria-label="dark ? 'Modo claro' : 'Modo escuro'">
+
+          <!-- Ícone lua -->
+          <svg x-show="!dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+          </svg>
+
+          <!-- Ícone sol -->
+          <svg x-show="dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+          </svg>
+
+        </button>
+
+
+        <!-- Botão desktop -->
+        <a href="#contact"
+          class="hidden md:inline-flex items-center gap-2 shimmer bg-brand-purple text-white text-sm font-medium px-5 py-2 rounded-full hover:bg-brand-blue transition-colors">
+          Entre em contato
+
+          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+
+        </a>
+
+
+        <!-- Botão hamburger -->
+        <button @click="mm = !mm"
+          class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800"
+          :aria-expanded="mm" aria-label="Abrir menu">
+
+          <!-- Ícone menu -->
+          <svg x-show="!mm" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+
+          <!-- Ícone fechar -->
+          <svg x-show="mm" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+
+        </button>
+
+      </div>
+
+    </nav>
+
+
+    <!-- =======================================================
+       MENU MOBILE
+  ======================================================== -->
+
+    <div x-show="mm" x-cloak x-transition:enter="transition ease-out duration-200"
+      x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+      x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0"
+      x-transition:leave-end="opacity-0 -translate-y-2"
+      class="md:hidden bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-900">
+
+      <ul class="flex flex-col px-6 py-5 gap-4 text-sm font-medium" role="list">
+
+        <li>
+          <a href="#services" @click="mm = false"
+            class="block text-zinc-700 dark:text-zinc-300 hover:text-brand-purple transition-colors">
+            Serviços
+          </a>
+        </li>
+
+        <li>
+          <a href="#work" @click="mm = false"
+            class="block text-zinc-700 dark:text-zinc-300 hover:text-brand-purple transition-colors">
+            Projetos
+          </a>
+        </li>
+
+        <li>
+          <a href="#about" @click="mm = false"
+            class="block text-zinc-700 dark:text-zinc-300 hover:text-brand-purple transition-colors">
+            Sobre
+          </a>
+        </li>
+
+        <li>
+          <a href="#reviews" @click="mm = false"
+            class="block text-zinc-700 dark:text-zinc-300 hover:text-brand-purple transition-colors">
+            Avaliações
+          </a>
+        </li>
+
+        <li>
+          <a href="#contact" @click="mm = false"
+            class="block text-zinc-700 dark:text-zinc-300 hover:text-brand-purple transition-colors">
+            Contato
+          </a>
+        </li>
+
+        <li class="pt-2 border-t border-zinc-100 dark:border-zinc-900">
+
+          <a href="#contact" @click="mm = false"
+            class="inline-flex shimmer bg-brand-purple text-white font-medium text-sm px-5 py-2.5 rounded-full">
+            Entre em contato →
+          </a>
+
+        </li>
+
+      </ul>
+
+    </div>
+
+  </header>
+
+
+
+  <main>
+
+
+    <!-- =========================================================
+     HERO
+========================================================== -->
+
+    <section id="hero" class="relative min-h-screen flex items-center pt-16 overflow-hidden">
+
+      <!-- Elementos decorativos -->
+      <div class="absolute top-1/4 right-0 w-96 h-96 bg-brand-purple/10 rounded-full blur-3xl pointer-events-none"
+        aria-hidden="true"></div>
+
+      <div
+        class="absolute bottom-1/4 left-0 w-64 h-64 bg-zinc-200/50 dark:bg-zinc-800/30 rounded-full blur-3xl pointer-events-none"
+        aria-hidden="true"></div>
+
+
+      <div class="relative z-10 max-w-6xl mx-auto px-6 py-24 w-full">
+
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+
+
+          <!-- Conteúdo principal -->
+          <div>
+
+            <p class="reveal text-sm font-medium text-brand-purple tracking-widest uppercase mb-4">
+              Analista de Dados
+            </p>
+
+            <h1
+              class="reveal d1 font-display font-bold text-5xl md:text-6xl lg:text-7xl leading-[1.05] tracking-tight text-zinc-900 dark:text-white mb-6">
+              Olá! Sou
+              <span class="text-brand-purple">Renan</span>
+            </h1>
+
+            <p
+              class="reveal d2 text-lg md:text-xl text-zinc-500 dark:text-zinc-400 font-light leading-relaxed max-w-md mb-10">
+              Analista de <strong class="font-medium text-zinc-700 dark:text-zinc-300">Dados & Desenvolvedor
+                Fullstack</strong>.
+              Transformo dados e necessidades de negócio em soluções digitais funcionais,
+              organizadas e eficientes — utilizando Python, SQL, Power BI e tecnologias web.
+            </p>
+
+
+            <!-- Botões -->
+            <div class="reveal d3 flex flex-wrap gap-4">
+
+              <a href="#work"
+                class="shimmer inline-flex items-center gap-2 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-medium px-7 py-3.5 rounded-full hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors text-sm">
+                Conheça meu trabalho
+
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+
+              </a>
+
+              <a href="#contact"
+                class="inline-flex items-center gap-2 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 font-medium px-7 py-3.5 rounded-full hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors text-sm">
+                Entre em contato
+              </a>
+
+            </div>
+
+
+            <!-- Indicadores -->
+            <div class="reveal d4 flex gap-8 mt-14 pt-8 border-t border-zinc-100 dark:border-zinc-900">
+
+              <div>
+                <p class="font-display font-bold text-3xl text-zinc-900 dark:text-white">
+                  37+
+                </p>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+                  Projetos feitos
+                </p>
+              </div>
+
+              <div>
+                <p class="font-display font-bold text-3xl text-zinc-900 dark:text-white">
+                  22+
+                </p>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+                  Clientes satisfeitos
+                </p>
+              </div>
+
+              <div>
+                <p class="font-display font-bold text-3xl text-zinc-900 dark:text-white">
+                  2 anos
+                </p>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+                  Experiência
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- Foto -->
+          <div class="reveal d2 flex justify-center md:justify-end">
+
+            <div class="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96">
+
+              <div class="pf w-full h-full rounded-3xl">
+
+                <!--
+              IMPORTANTE:
+              A imagem deve estar na mesma pasta do index.html.
+              Exemplo:
+              
+              projeto/
+              ├── index.html
+              └── renan.jpeg
+            -->
+                <img src="./renan.jpeg" alt="Renan — Analista de Dados e Desenvolvedor Fullstack" loading="eager">
+
+              </div>
+
+              <div
+                class="absolute -bottom-4 -left-4 bg-brand-purple text-white font-display font-bold text-sm px-4 py-2.5 rounded-2xl shadow-lg">
+                Aberto a novos projetos
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+     SERVIÇOS
+========================================================== -->
+
+    <section id="services" class="py-24 bg-zinc-50 dark:bg-zinc-900/40">
+
+      <div class="max-w-6xl mx-auto px-6">
+
+        <div class="mb-14">
+
+          <p class="reveal text-xs font-medium text-brand-purple tracking-widest uppercase mb-3">
+            O que eu faço
+          </p>
+
+          <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">
+            Serviços
+          </h2>
+
+        </div>
+
+
+        <div class="grid md:grid-cols-3 gap-6">
+
+
+          <!-- Serviço: Análise de Dados -->
+          <article
+            class="reveal d1 card-h group bg-zinc-900 dark:bg-zinc-800 rounded-2xl p-8 border border-zinc-800 hover:border-brand-blue">
+
+            <div
+              class="w-12 h-12 flex items-center justify-center bg-brand-blue/10 rounded-xl mb-6 group-hover:bg-brand-blue/20 transition-colors">
+
+              <svg class="w-6 h-6 text-brand-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2h-2" />
+              </svg>
+
+            </div>
+
+            <h3 class="font-display font-bold text-xl text-white mb-3">
+              Análise de Dados
+            </h3>
+
+            <p class="text-sm text-zinc-400 leading-relaxed">
+              Transformo dados em informações úteis para apoiar decisões.
+              Trabalho com Excel, Power BI, Power Query, DAX e SQL para
+              estruturar, analisar e visualizar dados de forma clara e objetiva.
+            </p>
+
+          </article>
+
+
+          <!-- Serviço: Fullstack -->
+          <article
+            class="reveal d2 card-h group bg-zinc-900 dark:bg-zinc-800 rounded-2xl p-8 border border-zinc-800 hover:border-brand-blue">
+
+            <div
+              class="w-12 h-12 flex items-center justify-center bg-brand-blue/10 rounded-xl mb-6 group-hover:bg-brand-blue/20 transition-colors">
+
+              <svg class="w-6 h-6 text-brand-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+              </svg>
+
+            </div>
+
+            <h3 class="font-display font-bold text-xl text-white mb-3">
+              Desenvolvimento Fullstack
+            </h3>
+
+            <p class="text-sm text-zinc-400 leading-relaxed">
+              Desenvolvimento de soluções fullstack utilizando Python e Javascript, com foco em
+              aplicações organizadas, funcionais e escaláveis. Tenho interesse
+              especial no desenvolvimento de APIs, sistemas web e automações.
+            </p>
+
+          </article>
+
+
+          <!-- Serviço: Automação -->
+          <article
+            class="reveal d3 card-h group bg-zinc-900 dark:bg-zinc-800 rounded-2xl p-8 border border-zinc-800 hover:border-brand-blue">
+
+            <div
+              class="w-12 h-12 flex items-center justify-center bg-brand-blue/10 rounded-xl mb-6 group-hover:bg-brand-blue/20 transition-colors">
+
+              <svg class="w-6 h-6 text-brand-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+              </svg>
+
+            </div>
+
+            <h3 class="font-display font-bold text-xl text-white mb-3">
+              Automação e Soluções
+            </h3>
+
+            <p class="text-sm text-zinc-400 leading-relaxed">
+              Busco utilizar programação e tecnologia para simplificar tarefas
+              e resolver problemas do dia a dia. Desenvolvo scripts, automações
+              e soluções personalizadas combinando Python, dados e bancos de dados.
+            </p>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+     PROJETOS
+========================================================== -->
+
+    <section id="work" class="py-24">
+
+      <div class="max-w-6xl mx-auto px-6">
+
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-14">
+
+          <div>
+
+            <p class="reveal text-xs font-medium text-brand-purple tracking-widest uppercase mb-3">
+              Portfólio
+            </p>
+
+            <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">
+              Projetos em andamento
+            </h2>
+
+          </div>
+
+
+          <!-- Link para todos os repositórios -->
+          <a href="https://github.com/rAleksander?tab=repositories" target="_blank" rel="noopener noreferrer"
+            class="reveal d1 text-sm font-medium text-zinc-500 dark:text-zinc-400 hover:text-brand-purple transition-colors self-start sm:self-auto nl">
+            Todos os projetos →
+          </a>
+
+        </div>
+
+
+        <div class="grid md:grid-cols-2 gap-6">
+
+
+          <!-- =====================================================
+           PROJETO 1
+      ====================================================== -->
+
+          <article
+            class="card-h reveal d1 group rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-brand-purple md:row-span-2">
+
+            <div class="pf w-full h-64 md:h-80">
+
+              <img src="C:\Users\RENAN\Desktop\Python\Portifolio Renan Tailwind\ninare.png"
+                alt="Sistema de gestão de atendimentos" loading="lazy">
+
+            </div>
+
+            <div class="p-7">
+
+              <div class="flex flex-wrap gap-2 mb-4">
+
+                <span
+                  class="text-xs bg-brand-purple/10 dark:bg-zinc-800 text-brand-purple border border-brand-purple/20 px-3 py-1 rounded-full">
+                  Python
+                </span>
+
+                <span
+                  class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">
+                  Django
+                </span>
+
+                <span
+                  class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">
+                  PostgreSQL
+                </span>
+
+              </div>
+
+
+              <a href="https://github.com/rAleksander/raof-tech-site" target="_blank" rel="noopener noreferrer">
+
+                <h3 class="font-display font-bold text-2xl text-zinc-900 dark:text-white mb-2">
+                  Sistema de gestão de atendimentos
+                </h3>
+
+              </a>
+
+
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-5">
+                Aplicação web desenvolvida para centralizar a gestão de atendimentos,
+                permitindo organizar a agenda, consultar horários disponíveis,
+                acompanhar valores e controlar o fluxo financeiro do negócio.
+                O projeto está sendo desenvolvido com foco em simplicidade,
+                praticidade e uma experiência de uso adequada à rotina profissional.
+              </p>
+
+
+              <a href="https://github.com/rAleksander/raof-tech-site" target="_blank" rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-900 dark:text-white nl">
+                Acesse o projeto
+
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+
+              </a>
+
+            </div>
+
+          </article>
+
+
+
+          <!-- =====================================================
+           PROJETO 2
+      ====================================================== -->
+
+          <article
+            class="card-h reveal d2 group rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-brand-purple">
+
+            <div class="pf w-full h-48">
+
+              <img src="C:\Users\RENAN\Desktop\Python\Portifolio Renan Tailwind\dmt_logo.png"
+                alt="DMT · Artificial Intelligence Company" loading="lazy">
+
+            </div>
+
+            <div class="p-6">
+
+              <div class="flex flex-wrap gap-2 mb-3">
+
+                <span
+                  class="text-xs bg-brand-purple/10 dark:bg-zinc-800 text-brand-purple border border-brand-purple/20 px-3 py-1 rounded-full">
+                  Python
+                </span>
+
+                <span
+                  class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">
+                  Javascript
+                </span>
+
+                <span
+                  class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">
+                  PostgreSQL
+                </span>
+
+              </div>
+
+
+              <a href="https://dmtdataconsulting.com.br/" target="_blank" rel="noopener noreferrer">
+
+                <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white mb-1.5">
+                  DMT · Artificial Intelligence Company
+                </h3>
+
+              </a>
+
+
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">
+                Desenvolvimento Full Stack e manutenção dos sistemas da DMT, atuando na refatoração e evolução do
+                front-end e back-end com Python, Node.js, React e JavaScript, além de HTML e CSS para desenvolvimento e
+                adequação de interfaces. Utilização de PostgreSQL para gerenciamento de dados. Responsável pela
+                implementação e modificação de componentes, menus, dashboards e módulos, além da adaptação dos sistemas
+                para torná-los mais personalizáveis e reutilizáveis por diferentes clientes, preservando as
+                funcionalidades existentes e as regras de negócio.
+              </p>
+
+
+              <a href="https://dmtdataconsulting.com.br/" target="_blank" rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-900 dark:text-white nl">
+                Acesse o projeto
+
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+
+              </a>
+
+            </div>
+
+          </article>
+
+
+
+          <!-- =====================================================
+           PROJETO 3
+      ====================================================== -->
+
+          <article
+            class="card-h reveal d3 group rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-brand-purple">
+
+            <div class="pf w-full h-48">
+
+              <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80"
+                alt="Projeto de análise de dados e dashboards" loading="lazy">
+
+            </div>
+
+            <div class="p-6">
+
+              <div class="flex flex-wrap gap-2 mb-3">
+
+                <span
+                  class="text-xs bg-brand-purple/10 dark:bg-zinc-800 text-brand-purple border border-brand-purple/20 px-3 py-1 rounded-full">
+                  Python
+                </span>
+
+                <span
+                  class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">
+                  Data Analysis
+                </span>
+
+                <span
+                  class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">
+                  SQL
+                </span>
+
+                <span
+                  class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">
+                  Power BI
+                </span>
+
+              </div>
+
+
+              <a href="https://github.com/rAleksander/Youtube-Download-Drive" target="_blank" rel="noopener noreferrer">
+
+                <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white mb-1.5">
+                  Análise de dados em Redes de Delivery
+                </h3>
+
+              </a>
+
+
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">
+                Projeto desenvolvido para estruturar e organizar dados,
+                criando dashboards e soluções de automação para facilitar
+                a análise e o acompanhamento de informações em estabelecimentos de delivery. A aplicação
+                de ferramentas de dados permitiu transformar informações
+                dispersas em indicadores mais claros e úteis para tomada de decisão.
+              </p>
+
+
+              <a href="https://github.com/rAleksander/Youtube-Download-Drive" target="_blank" rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-900 dark:text-white nl">
+                Acesse o projeto
+
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+
+              </a>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+     SOBRE
+========================================================== -->
+
+    <section id="about" class="py-24 bg-zinc-50 dark:bg-zinc-900/40">
+
+      <div class="max-w-6xl mx-auto px-6">
+
+        <div class="grid md:grid-cols-2 gap-16 items-center">
+
+
+          <!-- Foto -->
+          <div class="reveal order-2 md:order-1">
+
+            <div class="pf w-full aspect-square max-w-sm mx-auto rounded-3xl">
+
+              <img src="./renan.jpeg" alt="Renan" loading="lazy">
+
+            </div>
+
+          </div>
+
+
+          <!-- Texto -->
+          <div class="order-1 md:order-2">
+
+            <p class="reveal text-xs font-medium text-brand-purple tracking-widest uppercase mb-3">
+              Sobre mim
+            </p>
+
+            <h2
+              class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white leading-tight mb-6">
+              Um pouco sobre<br>
+              quem eu sou
+            </h2>
+
+
+            <p class="reveal d2 text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">
+              Profissional de Tecnologia, formado em Sistemas para Internet, pós-graduado em Análise de Dados e
+              atualmente me aperfeiçoando em Inteligência artificial e Machine Learning, com foco em
+              Python, SQL,
+              análise de dados, desenvolvimento Fullstack e automações de processos.
+              Minha trajetória profissional também inclui experiência na área
+              da saúde, o que contribuiu para desenvolver organização,
+              responsabilidade e capacidade de trabalhar com processos
+              e tomada de decisões.
+            </p>
+
+
+            <p class="reveal d3 text-zinc-500 dark:text-zinc-400 leading-relaxed mb-8">
+              Tenho interesse em transformar problemas em soluções práticas
+              por meio da tecnologia, combinando programação, dados e automação.
+            </p>
+
+
+            <p class="reveal d3 text-zinc-500 dark:text-zinc-400 leading-relaxed mb-8">
+              Quando não estou estudando ou desenvolvendo projetos, gosto de
+              explorar novas tecnologias e transformar ideias em projetos reais.
+            </p>
+
+
+            <!-- Tecnologias -->
+            <div class="reveal d4">
+
+              <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-widest mb-3">
+                Stack & ferramentas
+              </p>
+
+              <div class="flex flex-wrap gap-2" role="list" aria-label="Tecnologias e ferramentas">
+
+                <span role="listitem"
+                  class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-brand-purple">
+                  Python
+                </span>
+
+                <span role="listitem"
+                  class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-brand-purple">
+                  Javascript
+                </span>
+
+                <span role="listitem"
+                  class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-brand-purple">
+                  Power BI
+                </span>
+
+                <span role="listitem"
+                  class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-brand-purple">
+                  Django
+                </span>
+
+                <span role="listitem"
+                  class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-brand-purple">
+                  PostgreSQL
+                </span>
+
+                <span role="listitem"
+                  class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-brand-purple">
+                  Pandas
+                </span>
+
+                <span role="listitem"
+                  class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-brand-purple">
+                  Git & GitHub
+                </span>
+
+                <span role="listitem"
+                  class="stag text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 px-3.5 py-1.5 rounded-full hover:border-brand-purple">
+                  Docker
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+     AVALIAÇÕES
+========================================================== -->
+
+    <section id="reviews" class="py-24">
+
+      <div class="max-w-6xl mx-auto px-6">
+
+        <div class="mb-14">
+
+          <p class="reveal text-xs font-medium text-brand-purple tracking-widest uppercase mb-3">
+            Avaliações
+          </p>
+
+          <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">
+            O que os clientes dizem
+          </h2>
+
+        </div>
+
+
+        <div class="grid md:grid-cols-3 gap-6">
+
+
+          <!-- =====================================================
+           AVALIAÇÃO 1
+      ====================================================== -->
+
+          <blockquote
+            class="reveal d1 bg-zinc-50 dark:bg-zinc-900 rounded-2xl p-7 border border-zinc-100 dark:border-zinc-800">
+
+            <!-- 5 estrelas -->
+            <div class="flex gap-0.5 mb-5" aria-label="5 estrelas">
+
+              <!-- Estrela 1 -->
+              <svg class="w-4 h-4 text-[#f5b942] fill-current" viewBox="0 0 20 20" aria-hidden="true">
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+
+              <!-- Estrela 2 -->
+              <svg class="w-4 h-4 text-[#f5b942] fill-current" viewBox="0 0 20 20" aria-hidden="true">
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+
+              <!-- Estrela 3 -->
+              <svg class="w-4 h-4 text-[#f5b942] fill-current" viewBox="0 0 20 20" aria-hidden="true">
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+
+              <!-- Estrela 4 -->
+              <svg class="w-4 h-4 text-[#f5b942] fill-current" viewBox="0 0 20 20" aria-hidden="true">
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+
+              <!-- Estrela 5 -->
+              <svg class="w-4 h-4 text-[#f5b942] fill-current" viewBox="0 0 20 20" aria-hidden="true">
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+
+            </div>
+
+
+            <p class="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed mb-6 italic">
+              "Ótimo profissional"
+            </p>
+
+
+            <footer class="flex items-center gap-3">
+
+              <!-- Ícone em vez de foto -->
+              <div
+                class="w-10 h-10 rounded-full shrink-0 flex items-center justify-center bg-brand-purple/10 text-brand-purple">
+
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 9l3-3 3 3m-6 6l3 3 3-3M5 5h14v14H5z" />
+                </svg>
+
+              </div>
+
+              <div>
+
+                <p class="font-medium text-sm text-zinc-900 dark:text-white">
+                  Lucas Wilian
+                </p>
+
+                <p class="text-xs text-zinc-500">
+                  Taguatinga, DF
+                </p>
+
+              </div>
+
+            </footer>
+
+          </blockquote>
+
+
+
+          <!-- =====================================================
+           AVALIAÇÃO 2
+      ====================================================== -->
+
+          <blockquote class="reveal d2 bg-zinc-900 dark:bg-zinc-800 rounded-2xl p-7 border border-zinc-800">
+
+            <div class="flex gap-0.5 mb-5" aria-label="5 estrelas">
+
+              <!-- Cinco estrelas -->
+              <template x-for="i in 5" :key="i">
+                <svg class="w-4 h-4 text-[#f5b942] fill-current" viewBox="0 0 20 20" aria-hidden="true">
+                  <path
+                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              </template>
+
+            </div>
+
+
+            <p class="text-zinc-400 text-sm leading-relaxed mb-6 italic">
+              “Renan demonstra facilidade para aprender novas tecnologias e
+              transformar conceitos em soluções práticas. Tem uma abordagem
+              bastante orientada à resolução de problemas.”
+            </p>
+
+
+            <footer class="flex items-center gap-3">
+
+              <div
+                class="w-10 h-10 rounded-full shrink-0 flex items-center justify-center bg-brand-purple/20 text-brand-purple">
+
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 19v-4a2 2 0 012-2h12a2 2 0 012 2v4M7 13V9a5 5 0 0110 0v4M9 9h6" />
+                </svg>
+
+              </div>
+
+              <div>
+
+                <p class="font-medium text-sm text-white">
+                  Jovacir Azevedo
+                </p>
+
+                <p class="text-xs text-zinc-500">
+                  Brasília, DF
+                </p>
+
+              </div>
+
+            </footer>
+
+          </blockquote>
+
+
+
+          <!-- =====================================================
+           AVALIAÇÃO 3
+      ====================================================== -->
+
+          <blockquote
+            class="reveal d3 bg-zinc-50 dark:bg-zinc-900 rounded-2xl p-7 border border-zinc-100 dark:border-zinc-800">
+
+            <div class="flex gap-0.5 mb-5" aria-label="5 estrelas">
+
+              <template x-for="i in 5" :key="i">
+
+                <svg class="w-4 h-4 text-[#f5b942] fill-current" viewBox="0 0 20 20" aria-hidden="true">
+                  <path
+                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+
+              </template>
+
+            </div>
+
+
+            <p class="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed mb-6 italic">
+              "Tínhamos um prazo curto e uma ideia ainda pouco definida.
+              Renan conseguiu transformar o conceito em uma solução organizada
+              e funcional, aplicando seus conhecimentos de tecnologia, dados
+              e desenvolvimento com bastante autonomia."
+            </p>
+
+
+            <footer class="flex items-center gap-3">
+
+              <div
+                class="w-10 h-10 rounded-full shrink-0 flex items-center justify-center bg-brand-purple/10 text-brand-purple">
+
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 19h16M6 16V9m4 7V5m4 11v-4m4 4V7" />
+                </svg>
+
+              </div>
+
+              <div>
+
+                <p class="font-medium text-sm text-zinc-900 dark:text-white">
+                  Sandra Lima
+                </p>
+
+                <p class="text-xs text-zinc-500">
+                  São Paulo, SP
+                </p>
+
+              </div>
+
+            </footer>
+
+          </blockquote>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+     CONTATO
+========================================================== -->
+
+    <section id="contact" class="py-24">
+
+      <div class="max-w-6xl mx-auto px-6">
+
+        <div class="bg-zinc-900 dark:bg-zinc-800 rounded-3xl p-10 md:p-16 relative overflow-hidden">
+
+          <!-- Elementos decorativos -->
+          <div class="absolute top-0 right-0 w-64 h-64 bg-brand-purple/20 rounded-full blur-3xl pointer-events-none"
+            aria-hidden="true"></div>
+
+          <div class="absolute bottom-0 left-0 w-40 h-40 bg-brand-purple/10 rounded-full blur-2xl pointer-events-none"
+            aria-hidden="true"></div>
+
+
+          <div class="relative z-10 grid md:grid-cols-2 gap-12 items-start">
+
+
+            <!-- Informações -->
+            <div>
+
+              <p class="reveal text-xs font-medium text-brand-purple tracking-widest uppercase mb-3">
+                Entre em contato
+              </p>
+
+              <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-white leading-tight mb-5">
+                Vamos trabalhar<br>
+                juntos
+              </h2>
+
+              <p class="reveal d2 text-zinc-400 leading-relaxed mb-8">
+                Estou aberto a novas oportunidades na área de Tecnologia,
+                especialmente em Análise de Dados e Desenvolvimento Fullstack.
+                Seja para uma oportunidade profissional, projeto ou colaboração,
+                entre em contato para conversarmos.
+              </p>
+
+
+              <div class="reveal d3 flex flex-col gap-4">
+
+
+                <!-- Email -->
+                <a href="mailto:renan.aleksander1@gmail.com"
+                  class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
+
+                  <span
+                    class="w-9 h-9 flex items-center justify-center bg-zinc-800 rounded-lg group-hover:bg-brand-purple/20 transition-colors shrink-0">
+
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+
+                  </span>
+
+                  <span class="text-sm">
+                    renan.aleksander1@gmail.com
+                  </span>
+
+                </a>
+
+
+                <!-- LinkedIn -->
+                <a href="https://www.linkedin.com/in/francarenan/?isSelfProfile=true" target="_blank"
+                  rel="noopener noreferrer"
+                  class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
+
+                  <span
+                    class="w-9 h-9 flex items-center justify-center bg-zinc-800 rounded-lg group-hover:bg-brand-purple/20 transition-colors shrink-0">
+
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                    </svg>
+
+                  </span>
+
+                  <span class="text-sm">
+                    linkedin.com/in/francarenan
+                  </span>
+
+                </a>
+
+
+                <!-- GitHub -->
+                <a href="https://github.com/rAleksander" target="_blank" rel="noopener noreferrer"
+                  class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
+
+                  <span
+                    class="w-9 h-9 flex items-center justify-center bg-zinc-800 rounded-lg group-hover:bg-brand-purple/20 transition-colors shrink-0">
+
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        d="M12 0C5.373 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.565 21.802 24 17.302 24 12 24 5.373 18.627 0 12 0z" />
+                    </svg>
+
+                  </span>
+
+                  <span class="text-sm">
+                    github.com/rAleksander
+                  </span>
+
+                </a>
+
+              </div>
+
+            </div>
+
+
+            <!-- =====================================================
+             FORMULÁRIO
+             
+             Atualmente o formulário é apenas visual.
+             Para realmente enviar mensagens será necessário
+             conectar este formulário a um fullstack ou serviço
+             de formulários.
+        ====================================================== -->
+
+            <div class="reveal d2">
+
+              <form action="#" method="POST" novalidate>
+
+                <div class="flex flex-col gap-4">
+
+
+                  <!-- Nome e email -->
+                  <div class="grid sm:grid-cols-2 gap-4">
+
+                    <div>
+
+                      <label for="fname" class="block text-xs font-medium text-zinc-400 mb-1.5">
+                        Nome
+                        <span aria-hidden="true">*</span>
+                      </label>
+
+                      <input type="text" id="fname" name="name" placeholder="Seu nome" required autocomplete="name"
+                        class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl px-4 py-3 placeholder-zinc-600 focus:outline-none focus:border-brand-purple transition-colors">
+
+                    </div>
+
+
+                    <div>
+
+                      <label for="femail" class="block text-xs font-medium text-zinc-400 mb-1.5">
+                        Email
+                        <span aria-hidden="true">*</span>
+                      </label>
+
+                      <input type="email" id="femail" name="email" placeholder="seuemail@gmail.com" required
+                        autocomplete="email"
+                        class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl px-4 py-3 placeholder-zinc-600 focus:outline-none focus:border-brand-purple transition-colors">
+
+                    </div>
+
+                  </div>
+
+
+                  <!-- Assunto -->
+                  <div>
+
+                    <label for="fsubject" class="block text-xs font-medium text-zinc-400 mb-1.5">
+                      Assunto
+                    </label>
+
+                    <input type="text" id="fsubject" name="subject" placeholder="Título do projeto"
+                      class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl px-4 py-3 placeholder-zinc-600 focus:outline-none focus:border-brand-purple transition-colors">
+
+                  </div>
+
+
+                  <!-- Mensagem -->
+                  <div>
+
+                    <label for="fmessage" class="block text-xs font-medium text-zinc-400 mb-1.5">
+                      Mensagem
+                      <span aria-hidden="true">*</span>
+                    </label>
+
+                    <textarea id="fmessage" name="message" rows="4" placeholder="Descreva seu projeto..." required
+                      class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl px-4 py-3 placeholder-zinc-600 focus:outline-none focus:border-brand-purple transition-colors resize-none"></textarea>
+
+                  </div>
+
+
+                  <!-- Botão -->
+                  <button type="submit"
+                    class="shimmer w-full bg-brand-purple text-white font-display font-bold text-sm py-3.5 rounded-xl hover:bg-[#4d0bb0] transition-colors">
+                    Enviar mensagem →
+                  </button>
+
+                </div>
+
+              </form>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+  </main>
+
+
+
+  <!-- =========================================================
+     RODAPÉ
+========================================================== -->
+
+  <footer class="border-t border-zinc-100 dark:border-zinc-900 py-8">
+
+    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+
+      <p class="text-xs text-zinc-500 dark:text-zinc-500">
+        © <span id="yr"></span> Renan Aleksander. Todos os direitos reservados.
+      </p>
+
+      <p class="text-xs text-zinc-500 dark:text-zinc-500">
+        Analista de Dados & Desenvolvedor Fullstack
+      </p>
+
+    </div>
+
+  </footer>
+
+
+
+  <!-- =========================================================
+     JAVASCRIPT / ALPINE.JS
+========================================================== -->
+
+  <script>
+
+    function app() {
+
+      return {
+
+        /* Estado do modo escuro */
+        dark: false,
+
+        /* Estado do menu mobile */
+        mm: false,
+
+        /* Indica se a página já foi rolada */
+        sc: false,
+
+        /* Seção atualmente ativa */
+        s: 'hero',
+
+
+        /* =====================================================
+           INICIALIZAÇÃO
+        ====================================================== */
+
+        init() {
+
+
+          /* -----------------------------------------------------
+             MODO ESCURO
+  
+             Primeiro verifica se existe uma preferência salva.
+             Caso não exista, utiliza a preferência do sistema.
+          ------------------------------------------------------ */
+
+          this.dark =
+            localStorage.getItem('theme') === 'dark' ||
+            (
+              !localStorage.getItem('theme') &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches
+            );
+
+
+          /* Salva alterações do modo escuro no navegador */
+          this.$watch(
+            'dark',
+            value => {
+              localStorage.setItem(
+                'theme',
+                value ? 'dark' : 'light'
+              );
+            }
+          );
+
+
+          /* -----------------------------------------------------
+             CONTROLE DO SCROLL
+          ------------------------------------------------------ */
+
+          window.addEventListener(
+            'scroll',
+            () => {
+
+              /* Ativa o fundo do menu depois de rolar */
+              this.sc = window.scrollY > 20;
+
+              /* Atualiza a seção ativa */
+              this.updateSection();
+
+            },
+            { passive: true }
+          );
+
+
+          /* -----------------------------------------------------
+             ANIMAÇÃO DOS ELEMENTOS AO ENTRAREM NA TELA
+          ------------------------------------------------------ */
+
+          const io = new IntersectionObserver(
+
+            entries => {
+
+              entries.forEach(entry => {
+
+                if (entry.isIntersecting) {
+
+                  entry.target.classList.add('in');
+
+                  /* Não observa novamente depois da animação */
+                  io.unobserve(entry.target);
+
+                }
+
+              });
+
+            },
+
+            {
+              threshold: 0.1,
+              rootMargin: '0px 0px -40px 0px'
+            }
+
+          );
+
+
+          /* Observa todos os elementos que possuem .reveal */
+          document
+            .querySelectorAll('.reveal')
+            .forEach(element => io.observe(element));
+
+
+          /* -----------------------------------------------------
+             ANO AUTOMÁTICO DO RODAPÉ
+          ------------------------------------------------------ */
+
+          const yearElement = document.getElementById('yr');
+
+          if (yearElement) {
+            yearElement.textContent = new Date().getFullYear();
+          }
+
+
+          /* Atualiza a seção ativa assim que a página carrega */
+          this.updateSection();
+
+        },
+
+
+        /* =====================================================
+           IDENTIFICA A SEÇÃO ATUAL DA PÁGINA
+        ====================================================== */
+
+        updateSection() {
+
+          /* Verifica se o usuário chegou ao final da página */
+          const atBottom =
+            (window.innerHeight + window.scrollY) >=
+            document.body.scrollHeight - 60;
+
+
+          if (atBottom) {
+
+            this.s = 'contact';
+
+            return;
+
+          }
+
+
+          /*
+            A ordem é invertida porque as últimas seções
+            devem ser verificadas primeiro.
+          */
+          const ids = [
+            'contact',
+            'reviews',
+            'about',
+            'work',
+            'services',
+            'hero'
+          ];
+
+
+          /* Descobre qual seção está próxima da posição atual */
+          for (const id of ids) {
+
+            const element = document.getElementById(id);
+
+            if (
+              element &&
+              window.scrollY >= element.offsetTop - 130
+            ) {
+
+              this.s = id;
+
+              return;
+
+            }
+
+          }
+
+        }
+
+      };
+
+    }
+
+  </script>
+
+
+</body>
+
+</html>
